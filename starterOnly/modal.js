@@ -11,13 +11,27 @@ function editNav() {
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
+const closeForm = document.querySelector('.close');
 
-// launch modal event
+// MODAL EVENTS
+
+// Launch modal
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+// Close modal 
+closeForm.addEventListener('click', closeModal);
+
+// MODAL FUNCTIONS
 
 // launch modal form
 function launchModal() {
-  modalbg.style.display = "block";
+  modalbg.classList.add('block');
 }
+
+// close modal form
+function closeModal() {
+  modalbg.classList.remove('block');
+}
+
+
 
 

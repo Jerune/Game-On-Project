@@ -21,9 +21,19 @@ const emailAddress = document.getElementById('email');
 const birthdate = document.getElementById('birthdate');
 const amountOfTournaments = document.getElementById('quantity');
 const locationInputs = document.querySelectorAll('[type="radio"]');
+const locationsBlock = formData[5];
 const termsAndConditions = document.getElementById('checkbox1');
 const submitButton = document.querySelector(".btn-submit");
 
+// ---------------------- VARIABLES ----------------------
+
+let registeredFirstName = '';
+let registeredLastName = '';
+let registeredEmail = '';
+let registeredBirthDate = '';
+let registeredAmountOfTournaments = '';
+let registeredLocation = '';
+let registeredTerms = '';
 // ---------------------- MODAL EVENTS ----------------------
 
 // Launch modal
@@ -37,8 +47,18 @@ blurEvent(emailAddress, 'registeredEmail', 2, 'Vous devez entrer une adresse ema
 blurEvent(birthdate, 'registeredBirthDate', 3, 'Vous devez entrer votre date de naissance.');
 blurEvent(amountOfTournaments, 'registeredAmountOfTournaments', 4, 'Vous devez entrer un numero');
 
+// Loop Event Listeners radiobuttons
+for (let i = 0; i < locationInputs.length; i++){
+  locationInputs[i].addEventListener('change', ($event) =>{
+    if($event.target.checked){
+      registeredLocation = locationInputs[i].value;
+      return registeredLocation;
+    }
+  })
+}
+
 // Submit form
-submitButton.addEventListener('click', () =>{
+submitButton.addEventListener('click', (data) =>{
   let formResults = {
     prenom : '',
     nomFamille : '',
@@ -49,6 +69,15 @@ submitButton.addEventListener('click', () =>{
     conditions: '',
     newsletter: ''
   };
+  
+  // Run validations
+  validateInput(firstName, 'registeredFirstName', 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
+  validateInput(lastName, 'registeredLastName', 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
+  validateInput(emailAddress, 'registeredEmail', 2, 'Vous devez entrer une adresse email valide');
+  validateInput(birthdate, 'registeredBirthDate', 3, 'Vous devez entrer votre date de naissance.');
+  validateInput(amountOfTournaments, 'registeredAmountOfTournaments', 4, 'Vous devez entrer un numero');
+  validateRadioButtons();
+  validateCheckbox();
 
 });
 
@@ -70,15 +99,41 @@ function blurEvent(inputName, valueVariable, formDataNumber, errorMessage){
   })
 }
 
-// Input fields Event Listener & validation
+// Input fields Event validation
 function validateInput(inputName, valueVariable, formDataNumber, errorMessage){
     if(inputName.checkValidity()){
-      let valueVariable = inputName.value;
+      valueVariable = inputName.value;
       removeError(formDataNumber);
+      return valueVariable;
     } else{
       showError(formDataNumber, errorMessage);
     }
 }
+
+// Radio Buttons location validation
+function validateRadioButtons(){
+  let radioValidated = 'false';
+  for (let i = 0; i < locationInputs.length; i++){
+    if (locationInputs[i].checked){
+      radioValidated = 'true';
+    }
+  }
+  if (radioValidated === 'false'){
+    showError(5, 'Vous devez choisir une option.');
+  } else{
+    removeError(5);
+  }
+}  
+
+// Checkbox Terms & Conditions validation
+function validateCheckbox(){
+  if (termsAndConditions.checked){
+    removeError(6);
+  } else{
+    showError(6, 'Vous devez vérifier que vous acceptez les termes et conditions.');
+  }
+}
+
 
 // Show form error message
 function showError(formDataNumber, errorMessage){
@@ -98,6 +153,7 @@ function removeError(formDataNumber){
     return errorMessageElement;
   }
 }
+
 
 
 // ---------------------- FORM VALIDATION ----------------------

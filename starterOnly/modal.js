@@ -12,8 +12,10 @@ function editNav() {
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
+const formContent = document.querySelector(".content");
+const modalBody = document.querySelector(".modal-body");
 
-// FORM
+const form = document.getElementsByTagName('form')[0];
 const closeForm = document.querySelector('.close');
 const firstName = document.querySelector('#first');
 const lastName = document.querySelector('#last');
@@ -23,42 +25,37 @@ const amountOfTournaments = document.getElementById('quantity');
 const locationInputs = document.querySelectorAll('[type="radio"]');
 const locationsBlock = formData[5];
 const termsAndConditions = document.getElementById('checkbox1');
-const submitButton = document.querySelector(".btn-submit");
+const newsletter = document.getElementById('checkbox2');
+const submitButton = document.getElementById("submit-button");
+const closeFormButton = document.getElementById("close-form");
 
-// ---------------------- VARIABLES ----------------------
-
-let registeredFirstName = '';
-let registeredLastName = '';
-let registeredEmail = '';
-let registeredBirthDate = '';
-let registeredAmountOfTournaments = '';
-let registeredLocation = '';
-let registeredTerms = '';
 // ---------------------- MODAL EVENTS ----------------------
 
 // Launch modal
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-// Close modal 
+// Close modal / Form
 closeForm.addEventListener('click', closeModal);
+closeFormButton.addEventListener('click', closeModal);
 // Form fields 
-blurEvent(firstName, 'registeredFirstName', 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
-blurEvent(lastName, 'registeredLastName', 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
-blurEvent(emailAddress, 'registeredEmail', 2, 'Vous devez entrer une adresse email valide');
-blurEvent(birthdate, 'registeredBirthDate', 3, 'Vous devez entrer votre date de naissance.');
-blurEvent(amountOfTournaments, 'registeredAmountOfTournaments', 4, 'Vous devez entrer un numero');
+blurEvent(firstName, 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
+blurEvent(lastName, 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
+blurEvent(emailAddress, 2, 'Vous devez entrer une adresse email valide');
+blurEvent(birthdate, 3, 'Vous devez entrer votre date de naissance.');
+blurEvent(amountOfTournaments, 4, 'Vous devez entrer un numero');
 
 // Loop Event Listeners radiobuttons
 for (let i = 0; i < locationInputs.length; i++){
   locationInputs[i].addEventListener('change', ($event) =>{
     if($event.target.checked){
-      registeredLocation = locationInputs[i].value;
+      let registeredLocation = locationInputs[i].value;
       return registeredLocation;
     }
   })
 }
 
 // Submit form
-submitButton.addEventListener('click', (data) =>{
+submitButton.addEventListener('click', ($event) =>{
+  $event.preventDefault();
   let formResults = {
     prenom : '',
     nomFamille : '',
@@ -71,14 +68,26 @@ submitButton.addEventListener('click', (data) =>{
   };
   
   // Run validations
-  validateInput(firstName, 'registeredFirstName', 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
-  validateInput(lastName, 'registeredLastName', 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
-  validateInput(emailAddress, 'registeredEmail', 2, 'Vous devez entrer une adresse email valide');
-  validateInput(birthdate, 'registeredBirthDate', 3, 'Vous devez entrer votre date de naissance.');
-  validateInput(amountOfTournaments, 'registeredAmountOfTournaments', 4, 'Vous devez entrer un numero');
-  validateRadioButtons();
-  validateCheckbox();
+  let registeredFirstName = validateInput(firstName, 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
+  formResults.prenom = registeredFirstName;
+  let registeredLastName = validateInput(lastName, 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
+  formResults.nomFamille = registeredLastName;
+  let registeredEmail = validateInput(emailAddress, 2, 'Vous devez entrer une adresse email valide');
+  formResults.mail = registeredEmail;
+  let registeredBirthDate = validateInput(birthdate, 3, 'Vous devez entrer votre date de naissance.');
+  formResults.DatedeNaissance = registeredBirthDate;
+  let registeredAmountOfTournaments = validateInput(amountOfTournaments, 4, 'Vous devez entrer un numero');
+  formResults.montantTournoi = registeredAmountOfTournaments;
+  let registeredLocation = validateRadioButtons();
+  formResults.endroitTournoi = registeredLocation;
+  let registeredTerms = validateCheckbox();
+  formResults.conditions = registeredTerms;
+  formResults.newsletter = newsletter.value;
 
+  if (registeredFirstName !== undefined && registeredLastName !== undefined && registeredEmail !== undefined && registeredBirthDate !== undefined && registeredAmountOfTournaments !== undefined && registeredLocation !== undefined && registeredTerms !== undefined){
+    showConfirmationMessage();
+    return formResults;
+  }
 });
 
 // ---------------------- MODAL FUNCTIONS ----------------------
@@ -91,20 +100,21 @@ function launchModal() {
 // close modal form
 function closeModal() {
   modalbg.classList.remove('block');
+  window.location.reload();
 }
 // Event Listener for Blur input fields
-function blurEvent(inputName, valueVariable, formDataNumber, errorMessage){
+function blurEvent(inputName, formDataNumber, errorMessage){
   inputName.addEventListener('blur', () => {
-    validateInput(inputName, valueVariable, formDataNumber, errorMessage);
+    validateInput(inputName, formDataNumber, errorMessage);
   })
 }
 
 // Input fields Event validation
-function validateInput(inputName, valueVariable, formDataNumber, errorMessage){
+function validateInput(inputName, formDataNumber, errorMessage){
     if(inputName.checkValidity()){
-      valueVariable = inputName.value;
+      let returnValue = inputName.value;
       removeError(formDataNumber);
-      return valueVariable;
+      return returnValue;
     } else{
       showError(formDataNumber, errorMessage);
     }
@@ -116,6 +126,8 @@ function validateRadioButtons(){
   for (let i = 0; i < locationInputs.length; i++){
     if (locationInputs[i].checked){
       radioValidated = 'true';
+      let registeredLocation = locationInputs[i].value;
+      return registeredLocation;
     }
   }
   if (radioValidated === 'false'){
@@ -129,6 +141,7 @@ function validateRadioButtons(){
 function validateCheckbox(){
   if (termsAndConditions.checked){
     removeError(6);
+    return ('true');
   } else{
     showError(6, 'Vous devez vérifier que vous acceptez les termes et conditions.');
   }
@@ -154,7 +167,16 @@ function removeError(formDataNumber){
   }
 }
 
-
+function showConfirmationMessage(){
+  modalBody.removeChild(form);
+  submitButton.classList.add('select-hide');
+  closeFormButton.classList.remove('select-hide');
+  let confirmationMessage = document.createElement('h3');
+  confirmationMessage.textContent = 'Merci ! Votre réservation a été reçue.';
+  confirmationMessage.classList.add('confirmation-headline');
+  modalBody.appendChild(confirmationMessage);
+  formContent.style.paddingBottom = '20px';
+}
 
 // ---------------------- FORM VALIDATION ----------------------
 

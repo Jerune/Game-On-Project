@@ -353,6 +353,15 @@ input[data-error]::after {
   border: 0;
 }
 
+.confirmation-headline {
+  font-size: 2.3rem;
+  font-weight: normal;
+  padding: 310px 0;
+  width: 290px;
+  text-align: center;
+  margin: 0 auto;
+}
+
 /* custom select styles */
 .custom-select {
   position: relative;
@@ -413,7 +422,7 @@ input[data-error]::after {
 
 /* Hide the items when the select box is closed: */
 .select-hide {
-  display: none;
+  display: none !important;
 }
 
 .select-items div:hover,

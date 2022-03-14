@@ -64,6 +64,10 @@ img {
   border-radius: 15px;
 }
 
+.topnav a.active span{
+  border-bottom: 1px solid white;
+}
+
 .topnav .icon {
   display: none;
 }
@@ -190,7 +194,7 @@ main {
 
 label {
   font-family: var(--font-default);
-  font-size: 17px;
+  font-size: 14px;
   font-weight: normal;
   display: inline-block;
   margin-bottom: 11px;
@@ -218,7 +222,7 @@ input {
   display: block;
   margin-top: 7px;
   margin-bottom: 7px;
-  text-align: right;
+  text-align: left;
   line-height: 0.3;
   opacity: 0;
   transition: 0.3s;
@@ -356,7 +360,7 @@ input[data-error]::after {
 .confirmation-headline {
   font-size: 2.3rem;
   font-weight: normal;
-  padding: 310px 0;
+  padding: 250px 0;
   width: 290px;
   text-align: center;
   margin: 0 auto;
@@ -432,7 +436,7 @@ input[data-error]::after {
 /* custom select end */
 .text-label {
   font-weight: normal;
-  font-size: 16px;
+  font-size: 14px;
 }
 .hero-section {
   min-height: 93vh;
@@ -509,6 +513,14 @@ footer {
   margin: 0 20px;
 }
 @media screen and (max-width: 800px) {
+  .header-logo{
+    width: 103px;
+  }
+
+  .content{
+    margin: 20% auto;
+  }
+  
   .hero-section {
     display: block;
     box-shadow: unset;

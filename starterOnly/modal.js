@@ -47,8 +47,7 @@ blurEvent(amountOfTournaments, 4, 'Vous devez entrer un numero');
 for (let i = 0; i < locationInputs.length; i++){
   locationInputs[i].addEventListener('change', ($event) =>{
     if($event.target.checked){
-      let registeredLocation = locationInputs[i].value;
-      return registeredLocation;
+      return locationInputs[i].value; //registered location
     }
   })
 }
@@ -68,19 +67,19 @@ submitButton.addEventListener('click', ($event) =>{
   };
   
   // Run validations
-  let registeredFirstName = validateInput(firstName, 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
+  const registeredFirstName = validateInput(firstName, 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
   formResults.prenom = registeredFirstName;
-  let registeredLastName = validateInput(lastName, 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
+  const registeredLastName = validateInput(lastName, 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
   formResults.nomFamille = registeredLastName;
-  let registeredEmail = validateInput(emailAddress, 2, 'Vous devez entrer une adresse email valide');
+  const registeredEmail = validateInput(emailAddress, 2, 'Vous devez entrer une adresse email valide');
   formResults.mail = registeredEmail;
-  let registeredBirthDate = validateInput(birthdate, 3, 'Vous devez entrer votre date de naissance.');
+  const registeredBirthDate = validateInput(birthdate, 3, 'Vous devez entrer votre date de naissance.');
   formResults.DatedeNaissance = registeredBirthDate;
-  let registeredAmountOfTournaments = validateInput(amountOfTournaments, 4, 'Vous devez entrer un numero');
+  const registeredAmountOfTournaments = validateInput(amountOfTournaments, 4, 'Vous devez entrer un numero');
   formResults.montantTournoi = registeredAmountOfTournaments;
-  let registeredLocation = validateRadioButtons();
+  const registeredLocation = validateRadioButtons();
   formResults.endroitTournoi = registeredLocation;
-  let registeredTerms = validateCheckbox();
+  const registeredTerms = validateCheckbox();
   formResults.conditions = registeredTerms;
   formResults.newsletter = newsletter.value;
 
@@ -100,8 +99,8 @@ function launchModal() {
 // close modal form
 function closeModal() {
   modalbg.classList.remove('block');
-  window.location.reload();
 }
+
 // Event Listener for Blur input fields
 function blurEvent(inputName, formDataNumber, errorMessage){
   inputName.addEventListener('blur', () => {
@@ -112,12 +111,11 @@ function blurEvent(inputName, formDataNumber, errorMessage){
 // Input fields Event validation
 function validateInput(inputName, formDataNumber, errorMessage){
     if(inputName.checkValidity()){
-      let returnValue = inputName.value;
       removeError(formDataNumber);
-      return returnValue;
-    } else{
-      showError(formDataNumber, errorMessage);
-    }
+      return inputName.value; //registered input value
+    } 
+    showError(formDataNumber, errorMessage);
+    
 }
 
 // Radio Buttons location validation
@@ -126,22 +124,21 @@ function validateRadioButtons(){
   for (let i = 0; i < locationInputs.length; i++){
     if (locationInputs[i].checked){
       radioValidated = 'true';
-      let registeredLocation = locationInputs[i].value;
-      return registeredLocation;
+      removeError(5);
+      return locationInputs[i].value;
     }
   }
   if (radioValidated === 'false'){
     showError(5, 'Vous devez choisir une option.');
-  } else{
-    removeError(5);
-  }
+    return;
+  } 
 }  
 
 // Checkbox Terms & Conditions validation
 function validateCheckbox(){
   if (termsAndConditions.checked){
     removeError(6);
-    return ('true');
+    return 'true';
   } else{
     showError(6, 'Vous devez vérifier que vous acceptez les termes et conditions.');
   }
@@ -171,7 +168,7 @@ function showConfirmationMessage(){
   modalBody.removeChild(form);
   submitButton.classList.add('select-hide');
   closeFormButton.classList.remove('select-hide');
-  let confirmationMessage = document.createElement('h3');
+  const confirmationMessage = document.createElement('h3');
   confirmationMessage.textContent = 'Merci ! Votre réservation a été reçue.';
   confirmationMessage.classList.add('confirmation-headline');
   modalBody.appendChild(confirmationMessage);

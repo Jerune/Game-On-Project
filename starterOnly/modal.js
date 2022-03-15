@@ -36,7 +36,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // Close modal / Form
 closeForm.addEventListener('click', closeModal);
 closeFormButton.addEventListener('click', closeModal);
-// Form fields 
+// Form fields Blur events
 blurEvent(firstName, 0, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
 blurEvent(lastName, 1, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
 blurEvent(emailAddress, 2, 'Vous devez entrer une adresse email valide');
@@ -155,6 +155,7 @@ function showError(formDataNumber, errorMessage){
   }
 }
 
+// Remove form error message when validated
 function removeError(formDataNumber){
   if (typeof formDataNumber === 'number'){
     let errorMessageElement = formData.item(formDataNumber);
@@ -164,6 +165,7 @@ function removeError(formDataNumber){
   }
 }
 
+// Show confirmation message after form submit is valid
 function showConfirmationMessage(){
   modalBody.removeChild(form);
   submitButton.classList.add('select-hide');
@@ -174,8 +176,6 @@ function showConfirmationMessage(){
   modalBody.appendChild(confirmationMessage);
   formContent.style.paddingBottom = '20px';
 }
-
-// ---------------------- FORM VALIDATION ----------------------
 
 
 

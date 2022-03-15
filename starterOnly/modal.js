@@ -46,7 +46,9 @@ blurEvent(amountOfTournaments, 4, 'Vous devez entrer un numero');
 // Loop Event Listeners radiobuttons
 for (let i = 0; i < locationInputs.length; i++){
   locationInputs[i].addEventListener('change', ($event) =>{
+    // @ts-ignore
     if($event.target.checked){
+      // @ts-ignore
       return locationInputs[i].value; //registered location
     }
   })
@@ -81,6 +83,7 @@ submitButton.addEventListener('click', ($event) =>{
   formResults.endroitTournoi = registeredLocation;
   const registeredTerms = validateCheckbox();
   formResults.conditions = registeredTerms;
+  // @ts-ignore
   formResults.newsletter = newsletter.value;
 
   if (registeredFirstName !== undefined && registeredLastName !== undefined && registeredEmail !== undefined && registeredBirthDate !== undefined && registeredAmountOfTournaments !== undefined && registeredLocation !== undefined && registeredTerms !== undefined){
@@ -122,9 +125,11 @@ function validateInput(inputName, formDataNumber, errorMessage){
 function validateRadioButtons(){
   let radioValidated = 'false';
   for (let i = 0; i < locationInputs.length; i++){
+    // @ts-ignore
     if (locationInputs[i].checked){
       radioValidated = 'true';
       removeError(5);
+      // @ts-ignore
       return locationInputs[i].value;
     }
   }
@@ -136,6 +141,7 @@ function validateRadioButtons(){
 
 // Checkbox Terms & Conditions validation
 function validateCheckbox(){
+  // @ts-ignore
   if (termsAndConditions.checked){
     removeError(6);
     return 'true';
@@ -174,6 +180,7 @@ function showConfirmationMessage(){
   confirmationMessage.textContent = 'Merci ! Votre réservation a été reçue.';
   confirmationMessage.classList.add('confirmation-headline');
   modalBody.appendChild(confirmationMessage);
+  // @ts-ignore
   formContent.style.paddingBottom = '20px';
 }
 
